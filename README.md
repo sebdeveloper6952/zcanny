@@ -6,9 +6,9 @@ Implementation of the Canny Edge detection algorithm using Zig, for learning pur
 
 <div>
   <p>Original Image</p>
-  <img src="./dev.png" width="300" alt="Description" />
+  <img src="./dev.png" width="600" alt="Description" />
   <p>Stage 1: Gaussian Blur</p>
-  <img src="./output/gaussian_blur.png" width="300" alt="Description" />
+  <img src="./output/gaussian_blur.png" width="600" alt="Description" />
 </div>
 
 ### References
