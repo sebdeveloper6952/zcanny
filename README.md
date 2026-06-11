@@ -11,6 +11,8 @@ Implementation of the Canny Edge detection algorithm using Zig, for learning pur
   <img src="./output/gaussian_blur.png" width="600" alt="gaussian" />
   <p>Stage 2: Gradient Computation with Sobel kernels</p>
   <img src="./output/mag.png" width="600" alt="gradients" />
+  <p>Stage 3: Thinned magnitude with non-max suppression</p>
+  <img src="./output/thinned_mag.png" width="600" alt="gradients" />
 </div>
 
 ### References
