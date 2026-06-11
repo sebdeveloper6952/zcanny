@@ -1,7 +1,8 @@
 const std = @import("std");
 const zigimg = @import("zigimg");
-const gaussian_smooth = @import("gaussian_smoothing.zig").gaussian_smooth;
 const img = @import("img.zig");
+const gaussian_smooth = @import("gaussian_smoothing.zig").gaussian_smooth;
+const sobel = @import("sobel.zig").sobel;
 
 const Io = std.Io;
 
@@ -53,4 +54,6 @@ pub fn main(init: std.process.Init) !void {
     try img.write_img(allocator, init.io, "gaussian_blur.png", smoothed, image.width, image.height);
 
     // Stage 2: Sobel Gradients
+    const gradients = try sobel(allocator, smoothed, image.width, image.height);
+    try img.write_img(allocator, init.io, "mag.png", gradients.mag, image.width, image.height);
 }
