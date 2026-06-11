@@ -3,6 +3,7 @@ const zigimg = @import("zigimg");
 const img = @import("img.zig");
 const gaussian_smooth = @import("gaussian_smoothing.zig").gaussian_smooth;
 const sobel = @import("sobel.zig").sobel;
+const nms = @import("nms.zig");
 
 const Io = std.Io;
 
@@ -56,4 +57,8 @@ pub fn main(init: std.process.Init) !void {
     // Stage 2: Sobel Gradients
     const gradients = try sobel(allocator, smoothed, image.width, image.height);
     try img.write_img(allocator, init.io, "mag.png", gradients.mag, image.width, image.height);
+
+    // Stage 3: Non maximum suppression
+    const thinned_mag = try nms.quantized_nms(allocator, gradients.mag, gradients.dir, image.width, image.height);
+    try img.write_img(allocator, init.io, "thinned_mag.png", thinned_mag, image.width, image.height);
 }
