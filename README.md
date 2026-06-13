@@ -13,6 +13,8 @@ Implementation of the Canny Edge detection algorithm using Zig, for learning pur
   <img src="./output/mag.png" width="600" alt="gradients" />
   <p>Stage 3: Thinned magnitude with non-max suppression</p>
   <img src="./output/thinned_mag.png" width="600" alt="gradients" />
+  <p>Stage 4,5: Double Threshold + Hysteresis (Final Result)</p>
+  <img src="./output/canny.png" width="600" alt="gradients" />
 </div>
 
 ### References
