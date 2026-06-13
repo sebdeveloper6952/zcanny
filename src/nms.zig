@@ -3,9 +3,9 @@ const std = @import("std");
 pub fn quantized_nms(gpa: std.mem.Allocator, mag: []f32, dir: []f32, w: usize, h: usize) ![]f32 {
     const out = try gpa.alloc(f32, mag.len);
 
-    for (1..h) |row| {
+    for (1..h - 1) |row| {
         const base = row * w;
-        for (1..w) |col| {
+        for (1..w - 1) |col| {
             const index = base + col;
 
             // we don't check 0 magnitude vectors
@@ -24,7 +24,7 @@ pub fn quantized_nms(gpa: std.mem.Allocator, mag: []f32, dir: []f32, w: usize, h
             }
 
             const m = mag[index];
-            if (m > mag[index - off] and m > mag[index + off]) {
+            if (m >= mag[index - off] and m >= mag[index + off]) {
                 out[index] = m;
             }
         }
@@ -32,3 +32,8 @@ pub fn quantized_nms(gpa: std.mem.Allocator, mag: []f32, dir: []f32, w: usize, h
 
     return out;
 }
+
+// TODO: implement
+// pub fn interpolated_nms(gpa: std.mem.Allocator, mag: []f32, dir: []f32, w: usize, h: usize) ![]f32 {
+//
+// }

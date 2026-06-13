@@ -4,6 +4,8 @@ const img = @import("img.zig");
 const gaussian_smooth = @import("gaussian_smoothing.zig").gaussian_smooth;
 const sobel = @import("sobel.zig").sobel;
 const nms = @import("nms.zig");
+const dt = @import("double_threshold.zig");
+const hysteresis = @import("hysteresis.zig").hysteresis;
 
 const Io = std.Io;
 
@@ -11,6 +13,10 @@ const Config = struct {
     input_path: []const u8 = "dev.png",
     output_path: []const u8 = "output/",
     sigma: f32 = 1.4,
+
+    dt_p: f32 = 0.85,
+    dt_bins: usize = 1024,
+    dt_ratio: f32 = 3,
 
     fn init(args: []const [:0]const u8) !Config {
         _ = args;
@@ -38,7 +44,6 @@ pub fn main(init: std.process.Init) !void {
 
     var read_buffer: [zigimg.io.DEFAULT_BUFFER_SIZE]u8 = undefined;
     var image = try zigimg.Image.fromFile(allocator, init.io, file, read_buffer[0..]);
-    std.debug.print("input dimensions: {d}x{d}\n", .{ image.height, image.width });
 
     // image to grayscale8
     try image.convert(allocator, .grayscale8);
@@ -61,4 +66,11 @@ pub fn main(init: std.process.Init) !void {
     // Stage 3: Non maximum suppression
     const thinned_mag = try nms.quantized_nms(allocator, gradients.mag, gradients.dir, image.width, image.height);
     try img.write_img(allocator, init.io, "thinned_mag.png", thinned_mag, image.width, image.height);
+
+    // Stage 4: Double thresholding
+    const labels = try dt.percentile(allocator, thinned_mag, config.dt_bins, config.dt_p, config.dt_ratio);
+
+    // Stage 5: Hysteresis
+    const binary_map = try hysteresis(allocator, labels, image.width);
+    try img.write_img(allocator, init.io, "canny.png", binary_map, image.width, image.height);
 }

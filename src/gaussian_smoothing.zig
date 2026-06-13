@@ -33,12 +33,6 @@ fn gaussian_kernel_1d(gpa: std.mem.Allocator, sigma: f32) ![]f32 {
         kernel[i] = kernel[i] / total_weight;
     }
 
-    std.debug.print("kernel radius: {d:.2}\n", .{radius});
-    for (kernel) |kv| {
-        std.debug.print("{d:.2},", .{kv});
-    }
-    std.debug.print("\n", .{});
-
     return kernel;
 }
 
